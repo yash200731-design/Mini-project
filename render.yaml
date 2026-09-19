@@ -1,0 +1,36 @@
+services:
+  # FastAPI Backend Web Service
+  - type: web
+    name: projectmentor-ai-backend
+    env: python
+    rootDir: projectmentor-ai/backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: LLM_PROVIDER
+        value: openrouter
+      - key: LLM_API_KEY
+        sync: false
+      - key: EMBEDDING_PROVIDER
+        value: openrouter
+      - key: EMBEDDING_API_KEY
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+
+  # Next.js Frontend Web Service
+  - type: web
+    name: projectmentor-ai-frontend
+    env: node
+    rootDir: projectmentor-ai/frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.18.0
+      - key: NEXT_PUBLIC_API_URL
+        sync: false
