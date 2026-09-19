@@ -12,7 +12,7 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# CORS Middleware Configuration
+# CORS Middleware Configuration (Allows Localhost & Vercel / Render Deployments)
 origins = [
     settings.FRONTEND_URL,
     "http://localhost:3000",
@@ -21,11 +21,18 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"] if settings.FRONTEND_URL == "http://localhost:3000" else origins + [settings.FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/health", response_model=HealthResponse, tags=["Health"])
+def health_check():
+    return HealthResponse(
+        status="healthy",
+        service="ProjectMentor AI"
+    )
 
 # Register API Routers
 app.include_router(projects.router)
@@ -34,13 +41,6 @@ app.include_router(chat.router)
 app.include_router(viva.router)
 app.include_router(requirements.router)
 app.include_router(review.router)
-
-@app.get("/health", response_model=HealthResponse, tags=["Health"])
-def health_check():
-    return HealthResponse(
-        status="healthy",
-        service="ProjectMentor AI"
-    )
 
 if __name__ == "__main__":
     import uvicorn
