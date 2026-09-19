@@ -13,8 +13,7 @@ const getApiBaseUrl = () => {
     return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
   }
   if (typeof window !== 'undefined') {
-    // Relative API routes on Vercel single-folder deployment
-    return '';
+    return '/api';
   }
   return 'http://localhost:8000';
 };
@@ -38,13 +37,11 @@ async function handleResponse<T>(response: Response): Promise<T> {
 }
 
 export const api = {
-  // Health Check
   async checkHealth(): Promise<HealthStatus> {
     const res = await fetch(`${API_BASE_URL}/health`);
     return handleResponse<HealthStatus>(res);
   },
 
-  // Projects API
   async getProjects(): Promise<Project[]> {
     const res = await fetch(`${API_BASE_URL}/projects`);
     return handleResponse<Project[]>(res);
@@ -73,7 +70,6 @@ export const api = {
     }
   },
 
-  // Documents API
   async getDocuments(projectId: string): Promise<DocumentItem[]> {
     const res = await fetch(`${API_BASE_URL}/documents?project_id=${projectId}`);
     return handleResponse<DocumentItem[]>(res);
@@ -100,7 +96,6 @@ export const api = {
     }
   },
 
-  // Chat API
   async sendChatMessage(projectId: string, question: string): Promise<ChatResponse> {
     const res = await fetch(`${API_BASE_URL}/chat`, {
       method: 'POST',
@@ -110,7 +105,6 @@ export const api = {
     return handleResponse<ChatResponse>(res);
   },
 
-  // Viva Question Generator
   async generateViva(projectId: string, difficulty: string = 'medium', count: number = 10): Promise<VivaResponse> {
     const res = await fetch(`${API_BASE_URL}/viva/generate`, {
       method: 'POST',
@@ -120,7 +114,6 @@ export const api = {
     return handleResponse<VivaResponse>(res);
   },
 
-  // Requirement Analyzer
   async analyzeRequirements(projectId: string, documentId?: string): Promise<RequirementAnalysis> {
     const res = await fetch(`${API_BASE_URL}/requirements/analyze`, {
       method: 'POST',
@@ -130,7 +123,6 @@ export const api = {
     return handleResponse<RequirementAnalysis>(res);
   },
 
-  // Document Reviewer
   async reviewDocument(projectId: string, documentId: string): Promise<DocumentReview> {
     const res = await fetch(`${API_BASE_URL}/review/document`, {
       method: 'POST',

@@ -13,7 +13,8 @@ const getApiBaseUrl = () => {
     return process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, '');
   }
   if (typeof window !== 'undefined') {
-    return '';
+    // Relative API routes on Vercel
+    return '/api';
   }
   return 'http://localhost:8000';
 };
