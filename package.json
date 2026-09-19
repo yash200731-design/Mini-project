@@ -1,0 +1,10 @@
+{
+  "name": "projectmentor-ai-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "cd projectmentor-ai/frontend && npm install && npm run build",
+    "start": "cd projectmentor-ai/frontend && npm start",
+    "dev": "cd projectmentor-ai/frontend && npm run dev"
+  }
+}
